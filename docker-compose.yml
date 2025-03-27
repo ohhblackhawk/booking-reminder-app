@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - ./server/database.sql:/docker-entrypoint-initdb.d/database.sql
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  node:
+    build: ./server
+    ports: 
+      - "5000:5000"
+    command: "node index.js"
+    depends_on:
+      - postgres
+  react:
+    build: ./client
+    ports: 
+      - "3000:3000"
+    command: "npm start"
+    depends_on:
+      - node
+volumes:
+  postgres_data:
