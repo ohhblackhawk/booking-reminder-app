@@ -24,5 +24,14 @@ services:
     command: "npm start"
     depends_on:
       - node
+    develop:
+      watch:
+      - action: sync
+        path: ./client
+        target: /app
+        ignore:
+          - node_modules/
+      - action: rebuild
+        path: package.json
 volumes:
   postgres_data:
